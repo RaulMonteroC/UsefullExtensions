@@ -13,23 +13,35 @@ namespace UsefullExtensions
             var weekendDays = GetWeekendCount(date, newDate);
             var holidays = GetHolidayCount(date, newDate);
 
-            newDate = newDate.AddDays(weekendDays);
-            newDate = newDate.AddDays(holidays);
+            newDate = newDate.AddDays(weekendDays + holidays);            
 
             return newDate;
         }
 
         private static int GetWeekendCount(DateTime date, DateTime finalDate)
         {
-            var days = (finalDate - date).Days;
-            var weekendDays = (days / 7) * 2;
-
-            if (finalDate.DayOfWeek == DayOfWeek.Saturday || finalDate.DayOfWeek == DayOfWeek.Sunday)
+            int totalWeekendDays = 0;
+            int days = 0;
+            int totalWeeks = 0;
+            int weekendDays = 0;
+            do
             {
-                weekendDays += 2;
-            }
+                days = (finalDate - date).Days;
+                totalWeeks = (days / 7);                
+                weekendDays = totalWeeks * 2;
 
-            return weekendDays;
+                if (finalDate.DayOfWeek == DayOfWeek.Saturday || finalDate.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    weekendDays += 2;
+                }
+
+                date = finalDate;
+                finalDate = finalDate.AddDays(weekendDays);
+                totalWeekendDays += weekendDays;
+            
+            }while(weekendDays > 0);
+
+            return totalWeekendDays;
         }
 
         private static int GetHolidayCount(DateTime originalDate, DateTime finalDate)
