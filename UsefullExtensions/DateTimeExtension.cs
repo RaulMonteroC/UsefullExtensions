@@ -46,7 +46,9 @@ namespace UsefullExtensions
 
         private static int GetHolidayCount(DateTime originalDate, DateTime finalDate)
         {
-            return 0;
+            var holidays = HolidayCollection.GetAll().Where(date => originalDate <= date && finalDate >= date);
+
+            return holidays != null ? holidays.Count() : 0;
         }
     }
 }
